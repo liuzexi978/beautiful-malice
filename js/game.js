@@ -298,7 +298,7 @@
     level: LEVELS[1],
     briefLesson: 1,
     score: 0, hearts: 1, maxHearts: 1, catches: 0,
-    hunger: 62, maxHunger: 100, hungerRate: 0.72, growlCd: 8,
+    hunger: 62, maxHunger: 100, hungerRate: 1.12, growlCd: 8,
     hungerWarned: false, hungerZeroWarned: false,
     begCd: 14, begShown: false, begActive: false, begTimer: 0, begMax: 5, begName: '', begText: '',
     ally: 0, grudge: 0, given: 0, refused: 0, allyUsed: 0,
@@ -664,7 +664,7 @@
     G.finishTimeLeft = 0;
     G.hunger = 62;
     G.maxHunger = 100;
-    G.hungerRate = L.dark ? 1.0 : 0.72;
+    G.hungerRate = L.dark ? 1.5 : 1.12;
     G.growlCd = rand(6, 10);
     G.hungerWarned = false;
     G.hungerZeroWarned = false;
