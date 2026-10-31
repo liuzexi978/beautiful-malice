@@ -4,3 +4,6 @@ _Dev/
 *.zip
 node_modules/
 *.log
+.vercel
+
+.vercel/
