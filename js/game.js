@@ -31,7 +31,7 @@
       id: 1,
       snacks: ['chips', 'milktea', 'banana'],
       duration: 108,
-      write: [5.6, 8.6],
+      write: [3.4, 5.6],
       telegraph: 1.05,
       stare: [2.2, 3.2],
       patrolChance: 0.3,
@@ -64,7 +64,7 @@
       id: 2,
       snacks: ['spicy', 'chips', 'milktea', 'banana'],
       duration: 120,
-      write: [4.5, 7.2],
+      write: [2.8, 4.8],
       telegraph: 0.85,
       stare: [2.4, 3.5],
       patrolChance: 0.5,
@@ -97,7 +97,7 @@
       id: 3,
       snacks: ['spicy', 'noodle', 'chicken', 'milktea', 'banana'],
       duration: 135,
-      write: [3.8, 6.2],
+      write: [2.4, 4.0],
       telegraph: 0.62,
       stare: [2.6, 4.0],
       patrolChance: 0.62,
@@ -130,7 +130,7 @@
       id: 4,
       snacks: ['spicy', 'noodle', 'chicken', 'milktea'],
       duration: 145,
-      write: [4.2, 6.6],
+      write: [2.8, 4.4],
       telegraph: 0.7,
       stare: [2.8, 4.2],
       patrolChance: 0.55,
@@ -1102,7 +1102,7 @@
 
     if (want) {
       const data = SN[s.type];
-      const biteTime = data.eatTime / data.bites;
+      const biteTime = data.eatTime / data.bites * 1.55;
       G.biteTime = biteTime;
       G.eatHold += dt;
       G.crunchT = (G.crunchT || 0) - dt;
@@ -1389,14 +1389,10 @@
       G.finishTimeLeft = G.timeLeft;
       world.setActiveSnack(null);
       world.setEating(false);
-      toast('全吃完了！可以摸鱼到下课', 'good');
       G.score += 30;
-      teacherSay(G.level.relax, { cooldown: 8, pitch: 1.04 });
-      setTimeout(() => {
-        if (G.state === 'playing') {
-          showBigWarn('目标完成！', '试着偷偷玩会儿手机加分', 2200);
-        }
-      }, 600);
+      toast('全吃完了！这节过关', 'good');
+      endLesson();
+      return;
     } else {
       const next = G.snacks.findIndex(x => !x.eaten);
       const nextData = SN[G.snacks[next].type];
