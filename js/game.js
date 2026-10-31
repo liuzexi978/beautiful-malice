@@ -40,7 +40,7 @@
       base: 480,
       hearts: 1,
       story: '晚自习前，你把三包零食塞进桌兜。王老师今天没吃晚饭，脾气不太好。',
-      quote: '把书翻到第五十八页，这节课讲函数。没带书的，个人站起来哈。',
+      quote: '把书翻到第五十八页，这节课讲函数。唱、跳、rap、篮球都先放一放，没带书的个人站起来哈。',
       rules: [
         '板书时尽情吃，转身时必须收手。',
         '被盯上别硬撑，按 Shift 装乖。',
@@ -48,7 +48,7 @@
         '饥饿值会下降；吃零食恢复，低于 30 肚子会叫。',
         '红牌用完，她会把你拎到讲台上。'
       ],
-      intro: '上课咯。把书翻到第五十八页，搞快点。',
+      intro: '上课咯。篮球先放到一边，把书翻到第五十八页，搞快点。',
       turn: ['嗯？啥子声音？', '我听到有人在嚼东西哦。', '啥子味道这么香？', '哪个在偷嘴？个人站起来哈。'],
       caught: [
         '最后一排靠窗那个娃儿，嘴巴头是啥子？站到后头去。',
@@ -73,7 +73,7 @@
       base: 580,
       hearts: 1,
       story: '英语课。李老师已经开始怀疑有人上课偷吃；你的桌兜空了一半。',
-      quote: 'If I were you, I would not eat in my class. 把这句话抄十遍，抄不完不准走哈。',
+      quote: 'If I were you, I would not eat in my class. 我是奶龙，今天这节英语课，哪个都莫想偷嘴哈。',
       rules: [
         '英语老师转身很快，听粉笔声。',
         '她偶尔会走下讲台巡视。',
@@ -81,7 +81,7 @@
         '同学举报你时，按 E 堵住他的嘴。',
         '饥饿值会下降；吃零食恢复，低于 30 肚子会叫。'
       ],
-      intro: 'Class begins. Turn to page fifty-four，翻到五十四页哈。',
+      intro: 'Class begins. 我是奶龙，今天英语课。Turn to page fifty-four，翻到五十四页哈。',
       turn: ['Excuse me? 我好像看到啥子了哦。', 'Stop chewing. 哪个在嚼东西？', '啥子味道嘛，这么香？', '我跟你讲，莫在底下搞小动作哈。'],
       caught: [
         '最后一排那个同学，把嘴巴头的东西吐了，站到后头去。',
@@ -495,7 +495,8 @@
     UI.briefNum.textContent = id;
     UI.briefSubject.textContent = D.subject;
     UI.briefTime.textContent = D.time;
-    UI.briefAvatar.textContent = id === 4 ? '🕯️' : (['👩🏻‍🏫', '👩🏼‍🏫', '👩🏽‍🏫'][id - 1] || '👩🏻‍🏫');
+    const avatars = { 1: '🏀', 2: '🐉', 3: '👩🏽‍🏫', 4: '🕯️' };
+    UI.briefAvatar.textContent = avatars[id] || '👩🏻‍🏫';
     UI.briefTeacher.textContent = D.teacherName + ' · 四川话';
     UI.briefQuote.textContent = '“' + L.quote + '”';
     if (UI.briefStory) UI.briefStory.textContent = L.story || '';

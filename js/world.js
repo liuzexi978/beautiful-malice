@@ -43,7 +43,7 @@
 
   const LESSONS = {
     1: {
-      id: 1, subject: '数学课', teacherName: '王老师', teacherShort: '王',
+      id: 1, subject: '数学课', teacherName: '蔡徐坤', teacherShort: '蔡',
       time: '上午 第二节',
       chalkTitle: '第三章 · 函数与方程',
       chalkLines: [
@@ -55,10 +55,10 @@
         '练习：f(x) = 2x² + 4x − 1 ?',
         '（第三排靠窗的同学上来做）'
       ],
-      style: { coat: '#35547a', hair: '#2b2320', hairStyle: 'bun', glasses: true, skirt: '#2c3e55' }
+      style: { character: 'cai', coat: '#e8e4da', hair: '#151515', hairStyle: 'middle', glasses: false, skirt: '#1c1c20', pants: true, pantsColor: '#1c1c20' }
     },
     2: {
-      id: 2, subject: '英语课', teacherName: '李老师', teacherShort: '李',
+      id: 2, subject: '英语课', teacherName: '奶龙', teacherShort: '奶',
       time: '上午 第三节',
       chalkTitle: 'Unit 5 · If I were you',
       chalkLines: [
@@ -69,7 +69,7 @@
         '4. Homework: workbook P54-56',
         '   （明天听写，不及格请家长）'
       ],
-      style: { coat: '#7b2f3e', hair: '#3b2a22', hairStyle: 'ponytail', glasses: false, skirt: '#3a242c' }
+      style: { character: 'nailong' }
     },
     3: {
       id: 3, subject: '班主任的课', teacherName: '张主任', teacherShort: '张',
@@ -864,10 +864,147 @@
     const redCard = makeRedCard();
 
     /* ---------- 老师 ---------- */
+    function makeNailong(style) {
+      const g = new T.Group();
+      const yellow = 0xffd63a;
+      const yellowDark = 0xf0b52c;
+      const white = 0xfff4d6;
+
+      // 短腿
+      const legL = new T.Group(), legR = new T.Group();
+      legL.position.set(-0.16, 0.38, 0);
+      legR.position.set(0.16, 0.38, 0);
+      [legL, legR].forEach(leg => {
+        const thigh = new T.Mesh(new T.CapsuleGeometry(0.075, 0.18, 4, 8), mat(yellow));
+        thigh.position.y = -0.1; thigh.castShadow = true; leg.add(thigh);
+        const foot = new T.Mesh(new T.SphereGeometry(0.095, 12, 8), mat(yellowDark));
+        foot.scale.set(1, 0.55, 1.25); foot.position.set(0, -0.24, 0.05); leg.add(foot);
+      });
+      g.add(legL, legR);
+
+      // 圆滚滚的黄身体 + 白肚皮 + 老师领结
+      const torso = new T.Group(); torso.position.y = 1.0;
+      const body = new T.Mesh(new T.SphereGeometry(0.32, 22, 16), mat(yellow));
+      body.scale.set(1, 0.95, 0.82); body.castShadow = true; torso.add(body);
+      const belly = new T.Mesh(new T.SphereGeometry(0.24, 18, 12), mat(white));
+      belly.scale.set(0.8, 0.9, 0.45); belly.position.set(0, -0.06, 0.2); torso.add(belly);
+      const collar = new T.Mesh(new T.CylinderGeometry(0.10, 0.13, 0.05, 12), mat(0xf7f4ec));
+      collar.position.set(0, 0.24, 0.05); torso.add(collar);
+      const tie = box(0.07, 0.16, 0.025, 0xc0392b, 0, 0.13, 0.26);
+      tie.rotation.x = -0.1; torso.add(tie);
+      g.add(torso);
+
+      // 大头
+      const headGroup = new T.Group(); headGroup.position.y = 1.62;
+      const head = new T.Mesh(new T.SphereGeometry(0.31, 24, 18), mat(yellow));
+      head.scale.set(1.04, 0.98, 0.96); head.castShadow = true; headGroup.add(head);
+      const muzzle = new T.Mesh(new T.SphereGeometry(0.20, 18, 12), mat(white));
+      muzzle.scale.set(1, 0.62, 0.55); muzzle.position.set(0, -0.09, 0.235); headGroup.add(muzzle);
+
+      const eyeWhiteMat = new T.MeshBasicMaterial({ color: 0xffffff });
+      const pupilMat = new T.MeshBasicMaterial({ color: 0x17120e });
+      [-0.115, 0.115].forEach((x, i) => {
+        const eye = new T.Mesh(new T.SphereGeometry(0.082, 14, 10), eyeWhiteMat);
+        eye.scale.set(0.9, 1, 0.55); eye.position.set(x, 0.045, 0.245); headGroup.add(eye);
+        const pupil = new T.Mesh(new T.SphereGeometry(0.038, 10, 8), pupilMat);
+        pupil.position.set(x + (i ? -0.008 : 0.008), 0.035, 0.285); headGroup.add(pupil);
+        const glint = new T.Mesh(new T.SphereGeometry(0.012, 6, 6), eyeWhiteMat);
+        glint.position.set(x + 0.02, 0.06, 0.31); headGroup.add(glint);
+      });
+
+      [-0.05, 0.05].forEach(x => {
+        const nostril = new T.Mesh(new T.SphereGeometry(0.012, 6, 6), new T.MeshBasicMaterial({ color: 0x6b4a28 }));
+        nostril.position.set(x, -0.055, 0.315); headGroup.add(nostril);
+      });
+
+      [-1, 1].forEach(side => {
+        const horn = new T.Mesh(new T.ConeGeometry(0.045, 0.14, 8), mat(0xffa62b));
+        horn.position.set(side * 0.16, 0.30, -0.02);
+        horn.rotation.z = -side * 0.28; horn.rotation.x = -0.12; headGroup.add(horn);
+      });
+
+      const mouth = new T.Mesh(new T.SphereGeometry(0.06, 10, 6), new T.MeshBasicMaterial({ color: 0x3a1414 }));
+      mouth.scale.set(1.25, 0.22, 0.2); mouth.position.set(0, -0.14, 0.315); headGroup.add(mouth);
+
+      const glowMat = new T.MeshBasicMaterial({ color: 0xff3322 });
+      const eyeGlowL = new T.Mesh(new T.SphereGeometry(0.04, 8, 8), glowMat);
+      const eyeGlowR = new T.Mesh(new T.SphereGeometry(0.04, 8, 8), glowMat);
+      eyeGlowL.position.set(-0.115, 0.035, 0.30); eyeGlowR.position.set(0.115, 0.035, 0.30);
+      eyeGlowL.visible = eyeGlowR.visible = false; headGroup.add(eyeGlowL, eyeGlowR);
+      const faceGlow = new T.PointLight(0xff2a1a, 0, 1.5, 2);
+      faceGlow.position.set(0, 0, 0.4); headGroup.add(faceGlow);
+
+      const maw = new T.Group(); maw.position.set(0, -0.13, 0.27);
+      const cavity = new T.Mesh(new T.SphereGeometry(0.13, 16, 12), new T.MeshBasicMaterial({ color: 0x0d0205 }));
+      cavity.scale.set(1.1, 0.85, 0.55); maw.add(cavity);
+      const tongue = new T.Mesh(new T.SphereGeometry(0.075, 12, 8), new T.MeshBasicMaterial({ color: 0x65111c }));
+      tongue.scale.set(0.85, 0.22, 0.55); tongue.position.set(0, -0.06, 0.03); maw.add(tongue);
+      const toothMat = new T.MeshBasicMaterial({ color: 0xf1ead2 });
+      for (let i = 0; i < 9; i++) {
+        const tx = -0.09 + i * 0.0225;
+        const top = new T.Mesh(new T.ConeGeometry(0.012, 0.05, 5), toothMat);
+        top.position.set(tx, 0.075, 0.04); top.rotation.x = Math.PI; maw.add(top);
+        const bot = new T.Mesh(new T.ConeGeometry(0.011, 0.04, 5), toothMat);
+        bot.position.set(tx, -0.08, 0.04); maw.add(bot);
+      }
+      maw.visible = false; headGroup.add(maw);
+      g.add(headGroup);
+
+      function arm(side) {
+        const pivot = new T.Group(); pivot.position.set(side * 0.32, 1.18, 0.03);
+        const upper = new T.Mesh(new T.CapsuleGeometry(0.065, 0.14, 4, 8), mat(yellow));
+        upper.position.y = -0.08; upper.castShadow = true; pivot.add(upper);
+        const elbow = new T.Group(); elbow.position.y = -0.18;
+        const fore = new T.Mesh(new T.CapsuleGeometry(0.055, 0.12, 4, 8), mat(yellow));
+        fore.position.y = -0.06; elbow.add(fore);
+        const hand = sph(0.065, yellow, 0, -0.16, 0, null, 10); elbow.add(hand);
+        pivot.add(elbow);
+        return { pivot, elbow, hand };
+      }
+      const armL = arm(-1), armR = arm(1);
+      g.add(armL.pivot, armR.pivot);
+      armL.pivot.rotation.z = 0.15; armR.pivot.rotation.z = -0.15;
+      armL.pivot.rotation.x = -0.15; armR.pivot.rotation.x = -0.15;
+
+      const chalk = cyl(0.014, 0.014, 0.09, 0xfdfbf3, 0, -0.18, 0.05, 6);
+      chalk.rotation.x = Math.PI / 2; armR.elbow.add(chalk);
+      const book = box(0.22, 0.03, 0.3, 0xb73b32, 0, -0.2, 0.08); book.visible = false; armL.elbow.add(book);
+
+      [-1, 1].forEach(side => {
+        const wing = new T.Mesh(new T.SphereGeometry(0.12, 10, 8), mat(yellowDark));
+        wing.scale.set(0.45, 0.9, 0.18); wing.position.set(side * 0.28, 0.95, -0.18);
+        wing.rotation.z = side * 0.5; g.add(wing);
+      });
+      const tail = new T.Mesh(new T.CapsuleGeometry(0.08, 0.3, 4, 8), mat(yellow));
+      tail.position.set(0, 0.55, -0.32); tail.rotation.x = -0.7; g.add(tail);
+      const tailTip = new T.Mesh(new T.SphereGeometry(0.09, 10, 8), mat(0xffa62b));
+      tailTip.position.set(0, 0.4, -0.48); g.add(tailTip);
+
+      const torchPivot = new T.Group(); torchPivot.position.set(0.25, 1.15, 0.2);
+      const torchBody = new T.Mesh(new T.CylinderGeometry(0.034, 0.04, 0.16, 10), new T.MeshBasicMaterial({ color: 0x1c1e23 }));
+      torchBody.rotation.x = Math.PI / 2; torchPivot.add(torchBody);
+      const torchLens = new T.Mesh(new T.CircleGeometry(0.038, 14), new T.MeshBasicMaterial({ color: 0xfff4c8 }));
+      torchLens.position.z = 0.085; torchPivot.add(torchLens);
+      const torchSpot = new T.SpotLight(0xfff0c8, 0, 22, 0.4, 0.5, 1.1);
+      const torchTarget = new T.Object3D(); torchTarget.position.set(0, 0, 9); torchPivot.add(torchTarget);
+      torchSpot.target = torchTarget; torchPivot.add(torchSpot);
+      const torchBeam = new T.Mesh(new T.ConeGeometry(2.1, 9, 18, 1, true),
+        new T.MeshBasicMaterial({ color: 0xfff3cf, transparent: true, opacity: 0.04, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide }));
+      torchBeam.rotation.x = -Math.PI / 2; torchBeam.position.z = 4.5; torchPivot.add(torchBeam);
+      torchPivot.visible = false; g.add(torchPivot);
+
+      g.userData = { headGroup, torso, armL, armR, legL, legR, chalk, book, style, walkPhase: 0, headTurn: 0,
+        eyeGlowL, eyeGlowR, faceGlow, maw, normalMouth: mouth, torchPivot, torchLens, torchSpot, torchBeam, character: 'nailong' };
+      g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+      return g;
+    }
+
     function makeTeacher(style) {
+      if (style && style.character === 'nailong') return makeNailong(style);
       const g = new T.Group();
       const skin = 0xe9b889;
       const coat = style.coat, skirtCol = style.skirt, hairCol = style.hair;
+      const isCai = style.character === 'cai';
 
       // 腿
       const legL = new T.Group(); legL.position.set(-0.1, 0.78, 0);
@@ -876,15 +1013,22 @@
         const thigh = new T.Mesh(new T.CapsuleGeometry(0.048, 0.55, 4, 8), mat(pair[1] === skin ? 0xe8c3a2 : 0xe8c3a2));
         thigh.position.y = -0.38; thigh.castShadow = true;
         pair[0].add(thigh);
+        if (style.pants) {
+          const trouser = new T.Mesh(new T.CapsuleGeometry(0.064, 0.55, 4, 8), mat(style.pantsColor || 0x1c1c20));
+          trouser.position.y = -0.38; trouser.castShadow = true;
+          pair[0].add(trouser);
+        }
         const shoe = box(0.1, 0.07, 0.2, 0x2b2622, 0, -0.74, 0.04);
         pair[0].add(shoe);
       });
       g.add(legL, legR);
 
-      // 裙子
-      const skirt = new T.Mesh(new T.CylinderGeometry(0.195, 0.265, 0.42, 14), mat(skirtCol));
-      skirt.position.y = 0.88; skirt.castShadow = true;
-      g.add(skirt);
+      // 裙子（男老师/穿裤子时不要）
+      if (!style.pants) {
+        const skirt = new T.Mesh(new T.CylinderGeometry(0.195, 0.265, 0.42, 14), mat(skirtCol));
+        skirt.position.y = 0.88; skirt.castShadow = true;
+        g.add(skirt);
+      }
 
       // 上身
       const torso = new T.Group();
@@ -899,6 +1043,11 @@
       const v = new T.Mesh(new T.PlaneGeometry(0.13, 0.12), new T.MeshBasicMaterial({ color: 0xf7f4ec }));
       v.position.set(0, 0.14, 0.194); v.scale.set(0.85, 0.75, 1); torso.add(v);
       // 左胸口袋 & 红笔
+      if (isCai) {
+        const tie = box(0.045, 0.16, 0.014, 0x151515, 0, -0.04, 0.208);
+        const knot = box(0.055, 0.04, 0.022, 0x151515, 0, 0.06, 0.212);
+        torso.add(tie, knot);
+      }
       const pen = cyl(0.012, 0.012, 0.1, 0xc0392b, 0.1, 0.18, 0.2, 6);
       torso.add(pen);
       g.add(torso);
@@ -927,7 +1076,21 @@
       fringe.rotation.z = 0.1;
       fringe.rotation.x = -0.12;
       hairGroup.add(fringe);
-      if (style.hairStyle === 'bun') {
+      if (style.hairStyle === 'middle') {
+        fringe.visible = false;
+        cap.scale.set(1, 0.96, 1);
+        const fL = new T.Mesh(new T.SphereGeometry(0.105, 14, 8), hairMat);
+        fL.scale.set(0.62, 0.40, 0.50);
+        fL.position.set(-0.052, 0.068, 0.086);
+        fL.rotation.z = 0.34; fL.rotation.x = -0.12;
+        const fR = new T.Mesh(new T.SphereGeometry(0.105, 14, 8), hairMat);
+        fR.scale.set(0.62, 0.40, 0.50);
+        fR.position.set(0.052, 0.068, 0.086);
+        fR.rotation.z = -0.34; fR.rotation.x = -0.12;
+        const sideL = sph(0.045, hairCol, -0.125, -0.015, 0.02, null, 8);
+        const sideR = sph(0.045, hairCol, 0.125, -0.015, 0.02, null, 8);
+        hairGroup.add(fL, fR, sideL, sideR);
+      } else if (style.hairStyle === 'bun') {
         const bun = sph(0.075, hairCol, 0, 0.12, -0.1, null, 12);
         hairGroup.add(bun);
         const pin = box(0.12, 0.012, 0.012, 0xd9c27a, 0, 0.15, -0.09);
@@ -1047,6 +1210,19 @@
       chalk.rotation.x = Math.PI / 2;
       chalk.position.set(0, -0.27, 0.05);
       armR.elbow.add(chalk);
+
+      // 蔡徐坤的篮球
+      if (isCai) {
+        const ball = new T.Group();
+        ball.add(sph(0.115, 0xd77a2a, 0, 0, 0, null, 16));
+        const lineMat = new T.MeshBasicMaterial({ color: 0x1a1a1a });
+        const l1 = new T.Mesh(new T.TorusGeometry(0.116, 0.005, 4, 18), lineMat);
+        l1.rotation.y = Math.PI / 2; ball.add(l1);
+        const l2 = new T.Mesh(new T.TorusGeometry(0.116, 0.005, 4, 18), lineMat);
+        l2.rotation.x = Math.PI / 2; ball.add(l2);
+        ball.position.set(0, -0.38, 0.02);
+        armL.elbow.add(ball);
+      }
 
       // 红色教鞭/点名册
       const book = box(0.22, 0.03, 0.3, 0xb73b32, 0, -0.22, 0.08);
@@ -2161,7 +2337,7 @@
 
       // 换老师造型
       scene.remove(teacher);
-      teacher = makeTeacher(id === 2 ? LESSONS[1].style : L.style);
+      teacher = makeTeacher(L.style);
       teacher.position.set(0.2, 0, -6.0);
       teacher.rotation.y = Math.PI;
       scene.add(teacher);
