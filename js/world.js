@@ -2161,7 +2161,7 @@
 
       // 换老师造型
       scene.remove(teacher);
-      teacher = makeTeacher(L.style);
+      teacher = makeTeacher(id === 2 ? LESSONS[1].style : L.style);
       teacher.position.set(0.2, 0, -6.0);
       teacher.rotation.y = Math.PI;
       scene.add(teacher);
